@@ -1,36 +1,25 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Grades for {{ assignment.name }} {% endblock %}
+{% block title %}Grades for {{ results.0.student }} {% endblock %}
 {% block content %}
   <div class="container">
-    <h3> {{ assignment.name }}</h3>
-    <div class="row">
-      <div class="col-sm-3">
-          Date: {{ assignment.assignment_date }}
-        </div>
-      <div class="col-sm-3">
-        <a href="{% url 'grading_system:grading-not-received' assignment.pk %}" class="btn btn-primary">Not Recevived</a>
-        </div>
-    </div>
+    <h3> {{ results.0.student }}</h3>
     <form method="post" action="">
      {% csrf_token %}
-      <input type="hidden" name="assignment" value="{{ assignment.pk }}">
       <table>
         <thead>
         <tr>
-          <td>No.</td>
           <td>Name</td>
-          <td>id</td>
+          <td>Date</td>
           <td>grade</td>
            <td>Comment</td>
         </tr>
         </thead>
         {% for result in results %}
           <tr>
-          <td>{{ forloop.counter }}</td>
-            <td><a href="{% url 'grading_system:student-grades' result.student.id %}"> {{ result.student }}</a></td>
-            <td>{{ result.student.national_id }}</td>
+            <td>{{ result.assignment.name }}</td>
+            <td>{{ result.assignment.assignment_date }}</td>
             <td><input type="text" name="grade_student_{{ result.student.pk }}" value="{{ result.grade }}">
               <input type="hidden" name="assignment_result_pk_{{ result.student.pk }}" value="{{ result.pk }}">
             </td>

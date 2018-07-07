@@ -60,5 +60,5 @@ class AssignmentResult(models.Model):
     assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE, related_name='results')
     student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='results')
     grade = models.DecimalField(max_digits=5, decimal_places=2, default=0.0)
-    comments = models.TextField()
+    comments = models.CharField(max_length=250, null=True, blank=True)
 
