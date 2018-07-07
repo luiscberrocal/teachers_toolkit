@@ -24,8 +24,10 @@
           <tr>
             <td>{{ result.student }}</td>
             <td>{{ result.student.national_id }}</td>
-            <td><input type="text" name="grade_student_{{ student.pk }}" value="{{ result.grade }}"></td>
-          <td><input type="text" name="comment_student_{{ student.pk }}" value="{{ result.comment }}"></td>
+            <td><input type="text" name="grade_student_{{ result.student.pk }}" value="{{ result.grade }}">
+              <input type="hidden" name="assignment_result_pk_{{ result.student.pk }}" value="{{ result.pk }}">
+            </td>
+          <td><input type="text" name="comment_student_{{ result.student.pk }}" value="{{ result.comments }}"></td>
           </tr>
         {% endfor %}
       </table>
