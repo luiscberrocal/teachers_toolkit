@@ -54,11 +54,11 @@ class Command(BaseCommand):
         wb = load_workbook(filename=filename)
         sheet = wb['notas']
         cedula_col = 2
-        lab_num = 6
-        grade_col = 14
-        comment_col = 15
+        lab_num = 1
+        grade_col = 16
+        comment_col = 17
 
-        lab_name = 'Laboratorio {}'.format(lab_num)
+        lab_name = 'Parcial {}'.format(lab_num)
 
         first_name_col = 0
         last_name_col = 1
