@@ -1,0 +1,7 @@
+# PostgreSQL
+# ------------------------------------------------------------------------------
+POSTGRES_HOST=postgres
+POSTGRES_PORT=5432
+POSTGRES_DB=teachers_toolkit
+POSTGRES_USER=EfWAnrFvfDuINCoUauiDDADNJhOXggLw
+POSTGRES_PASSWORD=L31voOzBpLEVhfRDxqmnvr8WvY8VoMjikrINh0xwPeiNdP6zFLYeTUXSQdfWF7TI

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Grades for {{ assignment.name }} {% endblock %}
+{% block content %}
+  <div class="container">
+    <h3> {{ assignment.name }}</h3>
+    <div class="row">
+      {{ assignment.assingment_date }}
+    </div>
+    <form method="post" action="">
+     {% csrf_token %}
+      <input type="hidden" name="assignment" value="{{ assignment.pk }}">
+      <table>
+        <thead>
+        <tr>
+          <td>Name</td>
+          <td>id</td>
+          <td>grade</td>
+           <td>Comment</td>
+        </tr>
+        </thead>
+        {% for result in results %}
+          <tr>
+            <td>{{ result.student }}</td>
+            <td>{{ result.student.national_id }}</td>
+            <td><input type="text" name="grade_student_{{ student.pk }}" value="{{ result.grade }}"></td>
+          <td><input type="text" name="comment_student_{{ student.pk }}" value="{{ result.comment }}"></td>
+          </tr>
+        {% endfor %}
+      </table>
+    <div class="control-group">
+      <div class="controls">
+        <button type="submit" class="btn">Update</button>
+      </div>
+    </div>
+    </form>
+  </div>
+
+{% endblock content %}
