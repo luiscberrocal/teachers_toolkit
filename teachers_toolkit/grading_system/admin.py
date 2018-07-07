@@ -9,7 +9,7 @@ from .models import Student, Course, StudenEnrollment, AssignmentGroup, Assignme
 @admin.register(Student)
 class StudentAdmin(ImportExportActionModelAdmin):
     resource_class = StudentResource
-    list_display = ('id', 'first_name', 'last_name', 'national_id')
+    list_display = ('id', 'first_name', 'last_name', 'national_id', 'email')
 
 
 @admin.register(Course)
@@ -32,7 +32,7 @@ class AssignmentGroupAdmin(admin.ModelAdmin):
 
 
 @admin.register(Assignment)
-class AssignmentAdmin(admin.ModelAdmin):
+class AssignmentAdmin(ImportExportActionModelAdmin):
     list_display = (
         'id',
         'name',

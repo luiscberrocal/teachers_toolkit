@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static %}{% load i18n %}
+{% block title %}{% trans "Title" %}{% endblock %}
+
+{% block content %}
+<h1>{% trans 'Title' %}</h1>
+
+  <table>
+  <thead>
+  <tr>
+    <th>Assignment</th>
+    <th>Action</th>
+  </tr>
+  </thead>
+  {% for assignment in assignments %}
+  <tr>
+  <td>
+    <a href="{% url 'grading_system:grading' assignment.pk %}"> {{ assignment.name }}</a>
+  </td>
+  <td>
+    <a href="{% url 'grading_system:grading-not-received' assignment.pk %}">Not Received</a>
+  </td>
+  </tr>
+  {% endfor %}
+
+  </table>
+
+{% endblock content %}
+
+{% block javascript %}
+{{ block.super }}
+
+{% endblock javascript %}
