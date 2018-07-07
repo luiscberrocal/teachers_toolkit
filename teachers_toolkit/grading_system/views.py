@@ -3,9 +3,13 @@ from decimal import Decimal
 
 from django.shortcuts import redirect
 # Create your views here.
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
 
 from teachers_toolkit.grading_system.models import Assignment, Student, AssignmentResult
+
+class AssignmentListView(ListView):
+    model = Assignment
+    context_object_name = 'assignments'
 
 
 class GradeAssingmentView(TemplateView):
@@ -23,7 +27,7 @@ class GradeAssingmentView(TemplateView):
         return ctx
 
     def post(self, request, *args, **kwargs):
-        assignment = Assignment.objects.get(pk=self.kwargs['pk'])
+        #assignment = Assignment.objects.get(pk=self.kwargs['pk'])
         regexp = re.compile(r'^grade_student_(\d+)$')
         for key, value in request.POST.items():
             match = regexp.match(key)
@@ -36,7 +40,7 @@ class GradeAssingmentView(TemplateView):
                 assingment_result_pk = int(request.POST[assignment_result_pk_key])
                 result = AssignmentResult.objects.get(id=assingment_result_pk)
 
-                result.comments = '' #comment
+                result.comments = comment
                 result.grade = Decimal(value)
                 result.save()
         url = '/grading_system/grade/1/'
