@@ -6,7 +6,12 @@
   <div class="container">
     <h3> {{ assignment.name }}</h3>
     <div class="row">
-      {{ assignment.assingment_date }}
+      <div class="col-sm-3">
+          Date: {{ assignment.assignment_date }}
+        </div>
+      <div class="col-sm-3">
+        <a href="{% url 'grading_system:grading-not-received' assignment.pk %}" class="btn btn-primary">Not Recevived</a>
+        </div>
     </div>
     <form method="post" action="">
      {% csrf_token %}
@@ -33,7 +38,7 @@
       </table>
     <div class="control-group">
       <div class="controls">
-        <button type="submit" class="btn">Update</button>
+        <button type="submit" class="btn btn-primary">Update</button>
       </div>
     </div>
     </form>

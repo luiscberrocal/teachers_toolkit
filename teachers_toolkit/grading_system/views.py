@@ -3,6 +3,7 @@ from decimal import Decimal
 
 from django.shortcuts import redirect
 # Create your views here.
+from django.urls import reverse
 from django.views.generic import TemplateView, ListView
 
 from teachers_toolkit.grading_system.models import Assignment, Student, AssignmentResult
@@ -54,5 +55,5 @@ class GradeAssingmentView(TemplateView):
                 result.comments = comment
                 result.grade = Decimal(value)
                 result.save()
-        url = '/grading_system/grade/1/'
+        url = reverse('grading_system:grading', kwargs={'pk': self.kwargs['pk']})
         return redirect(url)
