@@ -328,3 +328,5 @@ teachers_toolkit/media/
 .env
 .envs/*
 !.envs/.local/
+
+output/
