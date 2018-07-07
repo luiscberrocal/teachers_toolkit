@@ -9,12 +9,16 @@
   <thead>
   <tr>
     <th>Assignment</th>
+    <th>Action</th>
   </tr>
   </thead>
   {% for assignment in assignments %}
   <tr>
   <td>
-    <a href="{% url 'grading_system:grading' assignment.pk %}"> {{ assignment.name }}</a> 
+    <a href="{% url 'grading_system:grading' assignment.pk %}"> {{ assignment.name }}</a>
+  </td>
+  <td>
+    <a href="{% url 'grading_system:grading-not-received' assignment.pk %}">Not Received</a>
   </td>
   </tr>
   {% endfor %}

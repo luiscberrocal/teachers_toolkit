@@ -11,6 +11,12 @@ class AssignmentListView(ListView):
     model = Assignment
     context_object_name = 'assignments'
 
+    def get_queryset(self):
+        qs = super(AssignmentListView, self).get_queryset()
+        if self.kwargs.get('filter') == 'not-received':
+            return qs.filter(grade=Decimal('0.0'))
+        return qs
+
 
 class GradeAssingmentView(TemplateView):
     template_name = 'grading_system/grading_assingment.html'
@@ -22,7 +28,12 @@ class GradeAssingmentView(TemplateView):
         assignment_results = list()
         for student in students:
             result = AssignmentResult.objects.get_or_create(student=student, assignment=ctx['assignment'])[0]
-            assignment_results.append(result)
+
+            if kwargs.get('filter') == 'not-received':
+                if result.grade == Decimal('0.0'):
+                    assignment_results.append(result)
+            else:
+                assignment_results.append(result)
         ctx['results'] = assignment_results
         return ctx
 
