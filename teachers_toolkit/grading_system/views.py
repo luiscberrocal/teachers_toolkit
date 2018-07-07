@@ -19,23 +19,28 @@ class AssignmentListView(ListView):
         return qs
 
 
+
+
 class GradeAssingmentView(TemplateView):
     template_name = 'grading_system/grading_assingment.html'
 
     def get_context_data(self, **kwargs):
         ctx = super(GradeAssingmentView, self).get_context_data(**kwargs)
         ctx['assignment'] = Assignment.objects.get(pk=self.kwargs['pk'])
-        students = Student.objects.all()
-        assignment_results = list()
-        for student in students:
-            result = AssignmentResult.objects.get_or_create(student=student, assignment=ctx['assignment'])[0]
+        if self.kwargs.get('create'):
+            students = Student.objects.all()
+            assignment_results = list()
+            for student in students:
+                result = AssignmentResult.objects.get_or_create(student=student, assignment=ctx['assignment'])[0]
 
-            if kwargs.get('filter') == 'not-received':
-                if result.grade == Decimal('0.0'):
+                if kwargs.get('filter') == 'not-received':
+                    if result.grade == Decimal('0.0'):
+                        assignment_results.append(result)
+                else:
                     assignment_results.append(result)
-            else:
-                assignment_results.append(result)
-        ctx['results'] = assignment_results
+            ctx['results'] = assignment_results
+        else:
+            ctx['results'] = AssignmentResult.objects.filter(assignment=ctx['assignment'])
         return ctx
 
     def post(self, request, *args, **kwargs):
@@ -57,3 +62,14 @@ class GradeAssingmentView(TemplateView):
                 result.save()
         url = reverse('grading_system:grading', kwargs={'pk': self.kwargs['pk']})
         return redirect(url)
+
+
+class StudentGradeAssingmentView(TemplateView):
+    template_name = 'grading_system/student_grades.html'
+
+    def get_context_data(self, **kwargs):
+        ctx = super(StudentGradeAssingmentView, self).get_context_data(**kwargs)
+        student_pk = self.kwargs['pk']
+        results = AssignmentResult.objects.filter(student__pk=student_pk).order_by('assignment__assignment_date')
+        ctx['results'] = results
+        return ctx
