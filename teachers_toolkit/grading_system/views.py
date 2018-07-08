@@ -27,12 +27,18 @@ class GradeAssingmentListView(LoginRequiredMixin, ListView):
     template_name = 'grading_system/assingment_result_list.html'
     model = AssignmentResult
     context_object_name = 'results'
+    paginate_by = 20
 
     def get_queryset(self):
-        qs = super(GradeAssingmentListView, self).get_queryset()
+        qs = super(GradeAssingmentListView, self).get_queryset().select_related(
+            'student', 'assignment', 'assignment__course')
         course = Course.objects.get(slug=self.kwargs['slug'])
-
-        return qs.select_related('student', 'assignment').filter(assignment__course=course)
+        if self.kwargs.get('filter') == 'not-received':
+            return qs.filter(
+                assignment__course=course, grade=Decimal('0.0')).order_by(
+                'student__last_name', 'student__first_name', 'assignment__assignment_date')
+        else:
+            return qs.select_related('student', 'assignment').filter(assignment__course=course)
 
 
 
