@@ -2,6 +2,7 @@ import re
 from decimal import Decimal
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Avg
 from django.shortcuts import redirect
 # Create your views here.
 from django.urls import reverse
@@ -142,5 +143,14 @@ class StudentGradeAssingmentView(LoginRequiredMixin, TemplateView):
         ctx = super(StudentGradeAssingmentView, self).get_context_data(**kwargs)
         student_pk = self.kwargs['pk']
         results = AssignmentResult.objects.filter(student__pk=student_pk).order_by('assignment__assignment_date')
+        average_labs = AssignmentResult.objects.filter(
+            student__pk=student_pk,
+            assignment__group__name='Laboratorios').aggregate(Avg('grade'))
+        average_partial = AssignmentResult.objects.filter(
+            student__pk=student_pk,
+            assignment__group__name='Parciales').aggregate(Avg('grade'))
+
+        ctx['average_labs'] = average_labs['grade__avg']
+        ctx['average_partials'] = average_partial['grade__avg']
         ctx['results'] = results
         return ctx
