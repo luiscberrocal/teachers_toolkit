@@ -86,6 +86,9 @@
         <p>Use this document as a way to quick start any new project.</p>
 
         <a href="{% url 'grading_system:assignments-list' %}">Assignments</a>
+
+        <a href="{% url 'grading_system:grading-course' 'introduccion-a-las-herramientas-sig' %}">Grades Intro SIG</a>
+        <a href="{% url 'grading_system:grading-course-not-received' 'introduccion-a-las-herramientas-sig' %}">Grades Intro SIG Not Received</a>
       {% endblock content %}
 
     </div> <!-- /container -->
