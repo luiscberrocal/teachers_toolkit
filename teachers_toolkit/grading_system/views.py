@@ -1,15 +1,16 @@
 import re
 from decimal import Decimal
 
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 # Create your views here.
 from django.urls import reverse
 from django.views.generic import TemplateView, ListView
 
-from teachers_toolkit.grading_system.models import Assignment, Student, AssignmentResult
+from teachers_toolkit.grading_system.models import Assignment, Student, AssignmentResult, Course
 
 
-class AssignmentListView(ListView):
+class AssignmentListView(LoginRequiredMixin, ListView):
     model = Assignment
     context_object_name = 'assignments'
 
@@ -19,14 +20,30 @@ class AssignmentListView(ListView):
             return qs.filter(grade=Decimal('0.0'))
         return qs
 
+class GradeAssingmentListView(LoginRequiredMixin, ListView):
+    """
+    http://127.0.0.1:8000/grading_system/grades/course/introduccion-a-las-herramientas-sig/
+    """
+    template_name = 'grading_system/assingment_result_list.html'
+    model = AssignmentResult
+    context_object_name = 'results'
 
-class GradeAssingmentView(TemplateView):
+    def get_queryset(self):
+        qs = super(GradeAssingmentListView, self).get_queryset()
+        course = Course.objects.get(slug=self.kwargs['slug'])
+
+        return qs.select_related('student', 'assignment').filter(assignment__course=course)
+
+
+
+class GradeAssingmentView(LoginRequiredMixin, TemplateView):
     template_name = 'grading_system/grading_assingment.html'
 
     def get_context_data(self, **kwargs):
         ctx = super(GradeAssingmentView, self).get_context_data(**kwargs)
         ctx['assignment'] = Assignment.objects.get(pk=self.kwargs['pk'])
         if  self.kwargs.get('create'):
+
             students = Student.objects.all()
             assignment_results = list()
             for student in students:
@@ -69,7 +86,7 @@ class GradeAssingmentView(TemplateView):
         return redirect(url)
 
 
-class StudentGradeAssingmentView(TemplateView):
+class StudentGradeAssingmentView(LoginRequiredMixin, TemplateView):
     template_name = 'grading_system/student_grades.html'
 
     def get_context_data(self, **kwargs):
