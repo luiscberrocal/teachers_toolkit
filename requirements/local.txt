@@ -23,3 +23,5 @@ django-debug-toolbar==1.9.1  # https://github.com/jazzband/django-debug-toolbar
 
 django-coverage-plugin==1.5.0  # https://github.com/nedbat/django_coverage_plugin
 pytest-django==3.3.2  # https://github.com/pytest-dev/pytest-django
+bumpversion==0.5.3
+django-test-tools==1.0.2

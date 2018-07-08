@@ -14,7 +14,7 @@ class StudentAdmin(ImportExportActionModelAdmin):
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'start_date', 'end_date')
+    list_display = ('id', 'slug', 'name', 'start_date', 'end_date')
     list_filter = ('start_date', 'end_date')
     search_fields = ('name',)
 
