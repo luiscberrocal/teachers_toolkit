@@ -39,7 +39,7 @@
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand" href="{% url 'home' %}">Teachers Toolkit</a>
+        <a class="navbar-brand" href="{% url 'home' %}">Teachers Toolkit <span class="version">v0.1.0</span> </a>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
@@ -85,10 +85,10 @@
       {% block content %}
         <p>Use this document as a way to quick start any new project.</p>
 
-        <a href="{% url 'grading_system:assignments-list' %}">Assignments</a>
+        <a href="{% url 'grading_system:assignments-list' %}" class="btn btn-primary">Assignments</a>
 
-        <a href="{% url 'grading_system:grading-course' 'introduccion-a-las-herramientas-sig' %}">Grades Intro SIG</a>
-        <a href="{% url 'grading_system:grading-course-not-received' 'introduccion-a-las-herramientas-sig' %}">Grades Intro SIG Not Received</a>
+        <a href="{% url 'grading_system:grading-course' 'introduccion-a-las-herramientas-sig' %}" class="btn btn-primary">Grades Intro SIG</a>
+        <a href="{% url 'grading_system:grading-course-not-received' 'introduccion-a-las-herramientas-sig' %}" class="btn btn-primary">Grades Intro SIG Not Received</a>
       {% endblock content %}
 
     </div> <!-- /container -->
