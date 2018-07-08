@@ -188,3 +188,23 @@ LOGGING = {
 
 # Your stuff...
 # ------------------------------------------------------------------------------
+# django-debug-toolbar
+# ------------------------------------------------------------------------------
+
+if DEBUG is True:
+    INSTALLED_APPS += ['debug_toolbar']  # noqa F405
+    class AllIPS(list):
+        def __contains__(self, item):
+            return True
+    INTERNAL_IPS = AllIPS()
+# https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#prerequisites
+
+# https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#middleware
+MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']  # noqa F405
+# https://django-debug-toolbar.readthedocs.io/en/latest/configuration.html#debug-toolbar-config
+DEBUG_TOOLBAR_CONFIG = {
+    'DISABLE_PANELS': [
+        'debug_toolbar.panels.redirects.RedirectsPanel',
+    ],
+    'SHOW_TEMPLATE_CONTEXT': True,
+}
