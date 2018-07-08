@@ -20,6 +20,26 @@ class AssignmentListView(LoginRequiredMixin, ListView):
             return qs.filter(grade=Decimal('0.0'))
         return qs
 
+    def post(self, request, *args, **kwargs):
+        # assignment = Assignment.objects.get(pk=self.kwargs['pk'])
+        regexp = re.compile(r'^grade_student_(\d+)$')
+        for key, value in request.POST.items():
+            match = regexp.match(key)
+            if match:
+                student_pk = int(match.group(1))
+                comment_key = 'comment_student_{}'.format(student_pk)
+                assignment_result_pk_key = 'assignment_result_pk_{}'.format(student_pk)
+                # student = Student.objects.get(pk=student_pk)
+                comment = request.POST[comment_key]
+                assingment_result_pk = int(request.POST[assignment_result_pk_key])
+                result = AssignmentResult.objects.get(id=assingment_result_pk)
+
+                result.comments = comment
+                result.grade = Decimal(value)
+                result.save()
+        url = reverse('grading_system:grading', kwargs={'pk': self.kwargs['pk']})
+        return redirect(url)
+
 class GradeAssingmentListView(LoginRequiredMixin, ListView):
     """
     http://127.0.0.1:8000/grading_system/grades/course/introduccion-a-las-herramientas-sig/
@@ -39,6 +59,29 @@ class GradeAssingmentListView(LoginRequiredMixin, ListView):
                 'student__last_name', 'student__first_name', 'assignment__assignment_date')
         else:
             return qs.select_related('student', 'assignment').filter(assignment__course=course)
+
+    def post(self, request, *args, **kwargs):
+        # assignment = Assignment.objects.get(pk=self.kwargs['pk'])
+        regexp = re.compile(r'^grade_student_(\d+)$')
+        for key, value in request.POST.items():
+            match = regexp.match(key)
+            if match:
+                student_pk = int(match.group(1))
+                comment_key = 'comment_student_{}'.format(student_pk)
+                assignment_result_pk_key = 'assignment_result_pk_{}'.format(student_pk)
+                # student = Student.objects.get(pk=student_pk)
+                comment = request.POST[comment_key]
+                assingment_result_pk = int(request.POST[assignment_result_pk_key])
+                result = AssignmentResult.objects.get(id=assingment_result_pk)
+
+                result.comments = comment
+                result.grade = Decimal(value)
+                result.save()
+        url =  reverse('grading_system:grading-course', kwargs={'slug': self.kwargs['slug']})
+        if self.kwargs.get('filter') == 'not-received':
+            url = reverse('grading_system:grading-course-not-received', kwargs={'slug': self.kwargs['slug']})
+        return redirect(url)
+
 
 
 
