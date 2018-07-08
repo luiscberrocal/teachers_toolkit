@@ -2,6 +2,7 @@ import re
 from decimal import Decimal
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Avg
 from django.shortcuts import redirect
 # Create your views here.
 from django.urls import reverse
@@ -19,6 +20,26 @@ class AssignmentListView(LoginRequiredMixin, ListView):
         if self.kwargs.get('filter') == 'not-received':
             return qs.filter(grade=Decimal('0.0'))
         return qs
+
+    def post(self, request, *args, **kwargs):
+        # assignment = Assignment.objects.get(pk=self.kwargs['pk'])
+        regexp = re.compile(r'^grade_student_(\d+)$')
+        for key, value in request.POST.items():
+            match = regexp.match(key)
+            if match:
+                student_pk = int(match.group(1))
+                comment_key = 'comment_student_{}'.format(student_pk)
+                assignment_result_pk_key = 'assignment_result_pk_{}'.format(student_pk)
+                # student = Student.objects.get(pk=student_pk)
+                comment = request.POST[comment_key]
+                assingment_result_pk = int(request.POST[assignment_result_pk_key])
+                result = AssignmentResult.objects.get(id=assingment_result_pk)
+
+                result.comments = comment
+                result.grade = Decimal(value)
+                result.save()
+        url = reverse('grading_system:grading', kwargs={'pk': self.kwargs['pk']})
+        return redirect(url)
 
 class GradeAssingmentListView(LoginRequiredMixin, ListView):
     """
@@ -39,6 +60,29 @@ class GradeAssingmentListView(LoginRequiredMixin, ListView):
                 'student__last_name', 'student__first_name', 'assignment__assignment_date')
         else:
             return qs.select_related('student', 'assignment').filter(assignment__course=course)
+
+    def post(self, request, *args, **kwargs):
+        # assignment = Assignment.objects.get(pk=self.kwargs['pk'])
+        regexp = re.compile(r'^grade_student_(\d+)$')
+        for key, value in request.POST.items():
+            match = regexp.match(key)
+            if match:
+                student_pk = int(match.group(1))
+                comment_key = 'comment_student_{}'.format(student_pk)
+                assignment_result_pk_key = 'assignment_result_pk_{}'.format(student_pk)
+                # student = Student.objects.get(pk=student_pk)
+                comment = request.POST[comment_key]
+                assingment_result_pk = int(request.POST[assignment_result_pk_key])
+                result = AssignmentResult.objects.get(id=assingment_result_pk)
+
+                result.comments = comment
+                result.grade = Decimal(value)
+                result.save()
+        url =  reverse('grading_system:grading-course', kwargs={'slug': self.kwargs['slug']})
+        if self.kwargs.get('filter') == 'not-received':
+            url = reverse('grading_system:grading-course-not-received', kwargs={'slug': self.kwargs['slug']})
+        return redirect(url)
+
 
 
 
@@ -99,5 +143,14 @@ class StudentGradeAssingmentView(LoginRequiredMixin, TemplateView):
         ctx = super(StudentGradeAssingmentView, self).get_context_data(**kwargs)
         student_pk = self.kwargs['pk']
         results = AssignmentResult.objects.filter(student__pk=student_pk).order_by('assignment__assignment_date')
+        average_labs = AssignmentResult.objects.filter(
+            student__pk=student_pk,
+            assignment__group__name='Laboratorios').aggregate(Avg('grade'))
+        average_partial = AssignmentResult.objects.filter(
+            student__pk=student_pk,
+            assignment__group__name='Parciales').aggregate(Avg('grade'))
+
+        ctx['average_labs'] = average_labs['grade__avg']
+        ctx['average_partials'] = average_partial['grade__avg']
         ctx['results'] = results
         return ctx
