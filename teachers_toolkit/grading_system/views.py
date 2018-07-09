@@ -44,6 +44,11 @@ class AssignmentListView(LoginRequiredMixin, ListView):
 class GradeAssingmentListView(LoginRequiredMixin, ListView):
     """
     http://127.0.0.1:8000/grading_system/grades/course/introduccion-a-las-herramientas-sig/
+
+
+    grade_student_{{ result.student.pk }}_assignment_{{ result.assignment.pk }}
+
+    comment_student_{{ result.student.pk }}_assignment_{{ result.assignment.pk }}
     """
     template_name = 'grading_system/assingment_result_list.html'
     model = AssignmentResult
@@ -63,13 +68,14 @@ class GradeAssingmentListView(LoginRequiredMixin, ListView):
 
     def post(self, request, *args, **kwargs):
         # assignment = Assignment.objects.get(pk=self.kwargs['pk'])
-        regexp = re.compile(r'^grade_student_(\d+)$')
+        regexp = re.compile(r'^grade_student_(\d+)_assignment_(\d+)$')
         for key, value in request.POST.items():
             match = regexp.match(key)
             if match:
                 student_pk = int(match.group(1))
-                comment_key = 'comment_student_{}'.format(student_pk)
-                assignment_result_pk_key = 'assignment_result_pk_{}'.format(student_pk)
+                assignment_pk = int(match.group(2))
+                comment_key = 'comment_student_{}_assignment_{}'.format(student_pk, assignment_pk)
+                assignment_result_pk_key = 'assignment_result_pk_{}_assignment_{}'.format(student_pk, assignment_pk)
                 # student = Student.objects.get(pk=student_pk)
                 comment = request.POST[comment_key]
                 assingment_result_pk = int(request.POST[assignment_result_pk_key])
