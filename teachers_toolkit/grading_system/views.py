@@ -160,3 +160,20 @@ class StudentGradeAssingmentView(LoginRequiredMixin, TemplateView):
         ctx['average_partials'] = average_partial['grade__avg']
         ctx['results'] = results
         return ctx
+
+
+
+class CreateEnrollmentsListView(LoginRequiredMixin, ListView):
+    model = Student
+    template_name = 'grading_system/create_enrollments.html'
+    context_object_name = 'students'
+
+    def get_context_data(self,  **kwargs):
+        ctx = super(CreateEnrollmentsListView, self).get_context_data(**kwargs)
+        ctx['courses'] = Course.objects.all()
+
+        return ctx
+
+
+
+
