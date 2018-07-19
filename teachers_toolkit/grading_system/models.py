@@ -1,5 +1,5 @@
+from django.contrib.postgres.fields import JSONField
 from django.db import models
-
 
 # Create your models here.
 from django_extensions.db.fields import AutoSlugField
@@ -31,11 +31,17 @@ class Course(models.Model):
 class StudenEnrollment(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    grade = models.DecimalField(max_digits=5, decimal_places=2, default=0.0)
+    partial_grades = JSONField(null=True)
+
+    class Meta:
+        unique_together = ('student', 'course')
 
 
 class AssignmentGroup(models.Model):
     name = models.CharField(max_length=60)
     weight = models.DecimalField(max_digits=5, decimal_places=2)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='assignment_groups')
 
     def __str__(self):
         return '{} {}'.format(self.name, self.weight)
@@ -61,4 +67,3 @@ class AssignmentResult(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='results')
     grade = models.DecimalField(max_digits=5, decimal_places=2, default=0.0)
     comments = models.CharField(max_length=250, null=True, blank=True)
-

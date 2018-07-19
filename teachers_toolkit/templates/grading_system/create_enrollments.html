@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static %}{% load i18n %}
+{% block title %}{% trans "Create Enrollemtns" %}{% endblock %}
+
+{% block content %}
+  <h1>{% trans 'Create Enrollemtns' %}</h1>
+
+  <form method="post" action="">
+    {% csrf_token %}
+
+    <select name="course" id="course">
+      {% for course in courses %}
+        <option value="{{ course.pk }}">{{ course.name }}</option>
+      {% endfor %}
+    </select>
+    <table>
+      <thead>
+      <tr>
+        <th>Select</th>
+        <th>Name</th>
+        <th>Id</th>
+      </tr>
+
+      </thead>
+      {% for student in students %}
+        <tr>
+          <td>
+            <input type="checkbox" name="student_{{ student.pk }}">
+          </td>
+          <td>{{ student.last_name }}, {{ student.first_name }}</td>
+          <td>{{ student.national_id }}</td>
+        </tr>
+      {% endfor %}
+
+    </table>
+    <div class="control-group">
+      <div class="controls">
+        <button type="submit" class="btn btn-primary">Update</button>
+      </div>
+    </div>
+  </form>
+{% endblock content %}
+
+{% block javascript %}
+  {{ block.super }}
+
+{% endblock javascript %}

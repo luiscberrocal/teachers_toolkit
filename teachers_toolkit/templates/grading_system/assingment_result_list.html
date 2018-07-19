@@ -26,10 +26,13 @@
             <td><a href="{% url 'grading_system:student-grades' result.student.id %}"> {{ result.student }}</a></td>
             <td>{{ result.student.national_id }}</td>
             <td>{{ result.assignment.name }}</td>
-            <td><input type="text" name="grade_student_{{ result.student.pk }}" value="{{ result.grade }}">
-              <input type="hidden" name="assignment_result_pk_{{ result.student.pk }}" value="{{ result.pk }}">
+            <td>
+              <input type="text" name="grade_student_{{ result.student.pk }}_assignment_{{ result.assignment.pk }}" value="{{ result.grade }}">
+              <input type="hidden" name="assignment_result_pk_{{ result.student.pk }}_assignment_{{ result.assignment.pk }}" value="{{ result.pk }}">
             </td>
-            <td><input type="text" name="comment_student_{{ result.student.pk }}" value="{{ result.comments }}"></td>
+            <td>
+              <input type="text" name="comment_student_{{ result.student.pk }}_assignment_{{ result.assignment.pk }}" value="{{ result.comments }}">
+            </td>
           </tr>
         {% endfor %}
       <tfooter>
