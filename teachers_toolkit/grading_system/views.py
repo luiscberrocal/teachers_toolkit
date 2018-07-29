@@ -175,6 +175,7 @@ class CreateEnrollmentsListView(LoginRequiredMixin, ListView):
 
         return ctx
 
+
     def post(self, request, *args, **kwargs):
         regexp = re.compile(r'^student_(\d+)')
         course_pk = int(request.POST.get('course'))
@@ -187,5 +188,17 @@ class CreateEnrollmentsListView(LoginRequiredMixin, ListView):
                 enrollments.append(enrollment)
         StudentEnrollment.objects.bulk_create(enrollments)
 
-        url = '/'
+        url = reverse('grading_system:enrollment-list', kwargs={'course_pk': course_pk})
         return redirect(url)
+
+
+class StudentEnrollmentsListView(LoginRequiredMixin, ListView):
+    model = StudentEnrollment
+    template_name = 'grading_system/student_enrollment_list.html'
+    context_object_name = 'enrollments'
+
+    def get_queryset(self):
+        qs = super(StudentEnrollmentsListView, self).get_queryset()
+
+
+        return qs.filter(course__id=self.kwargs['course_pk'])

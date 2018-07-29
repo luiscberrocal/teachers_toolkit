@@ -1,7 +1,7 @@
 from django.urls import path
 
 from teachers_toolkit.grading_system.views import GradeAssingmentView, AssignmentListView, StudentGradeAssingmentView, \
-    GradeAssingmentListView, CreateEnrollmentsListView
+    GradeAssingmentListView, CreateEnrollmentsListView, StudentEnrollmentsListView
 
 app_name = "grading_system"
 urlpatterns = [
@@ -18,6 +18,7 @@ urlpatterns = [
     path("grades/course/<str:slug>/not-received/", view=GradeAssingmentListView.as_view(),
          name="grading-course-not-received", kwargs={'filter': 'not-received'}),
     path("assignments/", view=AssignmentListView.as_view(), name="assignments-list"),
+    path('course-enrollment/<int:course_pk>/', view=StudentEnrollmentsListView.as_view(), name='enrollment-list'),
 
 
 path("enrollments/create/", view=CreateEnrollmentsListView.as_view(), name="create-enrollments"),
