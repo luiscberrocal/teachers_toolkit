@@ -8,7 +8,7 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.generic import TemplateView, ListView
 
-from teachers_toolkit.grading_system.models import Assignment, Student, AssignmentResult, Course
+from teachers_toolkit.grading_system.models import Assignment, Student, AssignmentResult, Course, StudentEnrollment
 
 
 class AssignmentListView(LoginRequiredMixin, ListView):
@@ -40,6 +40,7 @@ class AssignmentListView(LoginRequiredMixin, ListView):
                 result.save()
         url = reverse('grading_system:grading', kwargs={'pk': self.kwargs['pk']})
         return redirect(url)
+
 
 class GradeAssingmentListView(LoginRequiredMixin, ListView):
     """
@@ -84,12 +85,10 @@ class GradeAssingmentListView(LoginRequiredMixin, ListView):
                 result.comments = comment
                 result.grade = Decimal(value)
                 result.save()
-        url =  reverse('grading_system:grading-course', kwargs={'slug': self.kwargs['slug']})
+        url = reverse('grading_system:grading-course', kwargs={'slug': self.kwargs['slug']})
         if self.kwargs.get('filter') == 'not-received':
             url = reverse('grading_system:grading-course-not-received', kwargs={'slug': self.kwargs['slug']})
         return redirect(url)
-
-
 
 
 class GradeAssingmentView(LoginRequiredMixin, TemplateView):
@@ -98,7 +97,7 @@ class GradeAssingmentView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         ctx = super(GradeAssingmentView, self).get_context_data(**kwargs)
         ctx['assignment'] = Assignment.objects.get(pk=self.kwargs['pk'])
-        if  self.kwargs.get('create'):
+        if self.kwargs.get('create'):
 
             students = Student.objects.all()
             assignment_results = list()
@@ -165,18 +164,28 @@ class StudentGradeAssingmentView(LoginRequiredMixin, TemplateView):
         return ctx
 
 
-
 class CreateEnrollmentsListView(LoginRequiredMixin, ListView):
     model = Student
     template_name = 'grading_system/create_enrollments.html'
     context_object_name = 'students'
 
-    def get_context_data(self,  **kwargs):
+    def get_context_data(self, **kwargs):
         ctx = super(CreateEnrollmentsListView, self).get_context_data(**kwargs)
         ctx['courses'] = Course.objects.all()
 
         return ctx
 
+    def post(self, request, *args, **kwargs):
+        regexp = re.compile(r'^student_(\d+)')
+        course_pk = int(request.POST.get('course'))
+        enrollments = list()
+        for key, value in request.POST.items():
+            match = regexp.match(key)
+            if match:
+                student_pk = int(match.group(1))
+                enrollment = StudentEnrollment(student_id=student_pk, course_id=course_pk)
+                enrollments.append(enrollment)
+        StudentEnrollment.objects.bulk_create(enrollments)
 
-
-
+        url = '/'
+        return redirect(url)

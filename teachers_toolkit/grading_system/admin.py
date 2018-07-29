@@ -3,7 +3,7 @@ from django.contrib import admin
 from import_export.admin import ImportExportActionModelAdmin
 
 from teachers_toolkit.grading_system.resources import StudentResource
-from .models import Student, Course, StudenEnrollment, AssignmentGroup, Assignment, AssignmentResult
+from .models import Student, Course, StudentEnrollment, AssignmentGroup, Assignment, AssignmentResult
 
 
 @admin.register(Student)
@@ -19,7 +19,7 @@ class CourseAdmin(admin.ModelAdmin):
     search_fields = ('name',)
 
 
-@admin.register(StudenEnrollment)
+@admin.register(StudentEnrollment)
 class StudenEnrollmentAdmin(admin.ModelAdmin):
     list_display = ('id', 'student', 'course')
     list_filter = ('student', 'course')
