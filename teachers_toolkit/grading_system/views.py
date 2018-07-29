@@ -180,12 +180,22 @@ class CreateEnrollmentsListView(LoginRequiredMixin, ListView):
         regexp = re.compile(r'^student_(\d+)')
         course_pk = int(request.POST.get('course'))
         enrollments = list()
+        student_pks = list()
         for key, value in request.POST.items():
             match = regexp.match(key)
             if match:
                 student_pk = int(match.group(1))
-                enrollment = StudentEnrollment(student_id=student_pk, course_id=course_pk)
-                enrollments.append(enrollment)
+                student_pks.append(student_pk)
+        existing_enrollments = StudentEnrollment.objects.filter(student__pk__in=student_pks).values_list('student__pk', flat=True)
+
+        not_enrolled = list()
+        for student_pk in student_pks:
+            if student_pk not in existing_enrollments:
+                not_enrolled.append(student_pk)
+
+        for nr in not_enrolled:
+            enrollment = StudentEnrollment(student_id=nr, course_id=course_pk)
+            enrollments.append(enrollment)
         StudentEnrollment.objects.bulk_create(enrollments)
 
         url = reverse('grading_system:enrollment-list', kwargs={'course_pk': course_pk})
