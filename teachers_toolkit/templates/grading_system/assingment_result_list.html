@@ -14,17 +14,18 @@
         <tr>
           <td>No.</td>
           <td>Name</td>
-          <td>id</td>
+          <td class="d-none d-md-table-cell">id</td>
           <td>Assignment</td>
           <td>grade</td>
           <td>Comment</td>
+          <td class="d-none d-md-table-cell">Action</td>
         </tr>
         </thead>
         {% for result in results %}
           <tr>
             <td>{{ forloop.counter }}</td>
             <td><a href="{% url 'grading_system:student-grades' result.student.id %}"> {{ result.student }}</a></td>
-            <td>{{ result.student.national_id }}</td>
+            <td class="d-none d-md-table-cell">{{ result.student.national_id }}</td>
             <td>{{ result.assignment.name }}</td>
             <td>
               <input type="text" name="grade_student_{{ result.student.pk }}_assignment_{{ result.assignment.pk }}" value="{{ result.grade }}"
@@ -34,6 +35,9 @@
             <td>
               <input type="text" name="comment_student_{{ result.student.pk }}_assignment_{{ result.assignment.pk }}" value="{{ result.comments }}">
             </td>
+          <td class="d-none d-md-table-cell">
+            <button type="submit" class="btn btn-primary btn-sm">Update</button>
+          </td>
           </tr>
         {% endfor %}
       <tfooter>

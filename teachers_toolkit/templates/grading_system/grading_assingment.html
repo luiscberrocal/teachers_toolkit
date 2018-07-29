@@ -22,21 +22,25 @@
         <tr>
           <td>No.</td>
           <td>Name</td>
-          <td>id</td>
+          <td class="d-none d-sm-table-cell">id</td>
           <td>grade</td>
           <td>Comment</td>
+          <td class="d-none d-sm-table-cell">Action</td>
         </tr>
         </thead>
         {% for result in results %}
           <tr>
             <td>{{ forloop.counter }}</td>
             <td><a href="{% url 'grading_system:student-grades' result.student.id %}"> {{ result.student }}</a></td>
-            <td>{{ result.student.national_id }}</td>
+            <td class="d-none d-sm-table-cell">{{ result.student.national_id }}</td>
             <td><input type="text" name="grade_student_{{ result.student.pk }}" value="{{ result.grade }}"
                        class="grade">
               <input type="hidden" name="assignment_result_pk_{{ result.student.pk }}" value="{{ result.pk }}">
             </td>
             <td><input type="text" name="comment_student_{{ result.student.pk }}" value="{{ result.comments }}"></td>
+          <td class="d-none d-sm-table-cell">
+            <button type="submit" class="btn btn-primary btn-sm">Update</button>
+          </td>
           </tr>
         {% endfor %}
       </table>
