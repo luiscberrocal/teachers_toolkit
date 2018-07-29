@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static %}{% load i18n %}
+{% block title %}{% trans "Title" %}{% endblock %}
+
+{% block content %}
+  <h1>{% trans 'Enrollement for ' %} {{ enrollments.0.course.name }}</h1>
+
+  <table>
+    <thead>
+    <tr>
+      <th>Student</th>
+      <th>Id</th>
+    </tr>
+    </thead>
+    {% for enrollment in enrollments %}
+      <tr>
+        <td>
+         {{ enrollment.student.last_name }},  {{ enrollment.student.first_name }}
+        </td>
+        <td>
+         {{ enrollment.student.national_id }}
+        </td>
+      </tr>
+    {% endfor %}
+
+  </table>
+
+{% endblock content %}
+
+{% block javascript %}
+  {{ block.super }}
+
+{% endblock javascript %}

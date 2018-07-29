@@ -4,7 +4,7 @@
 
 {% block content %}
   <h1>{% trans 'Create Enrollemtns' %}</h1>
-
+<input type="checkbox" name="check_all" id="checkAll">  <label for="checkALL">Check All</label>
   <form method="post" action="">
     {% csrf_token %}
 
@@ -43,5 +43,9 @@
 
 {% block javascript %}
   {{ block.super }}
-
+  <script language="JavaScript">
+  $('#checkAll').click(function () {
+     $('input:checkbox').prop('checked', this.checked);
+ });
+  </script>
 {% endblock javascript %}
