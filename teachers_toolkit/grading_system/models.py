@@ -28,7 +28,7 @@ class Course(models.Model):
         return self.name
 
 
-class StudenEnrollment(models.Model):
+class StudentEnrollment(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     grade = models.DecimalField(max_digits=5, decimal_places=2, default=0.0)
