@@ -138,7 +138,10 @@ class GradeAssingmentView(LoginRequiredMixin, TemplateView):
                 result.comments = comment
                 result.grade = Decimal(value)
                 result.save()
-        url = reverse('grading_system:grading', kwargs={'pk': self.kwargs['pk']})
+        if kwargs.get('filter') == 'not-received':
+            url = reverse('grading_system:grading-not-received', kwargs={'pk': self.kwargs['pk']})
+        else:
+            url = reverse('grading_system:grading', kwargs={'pk': self.kwargs['pk']})
         return redirect(url)
 
 
