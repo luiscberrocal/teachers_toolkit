@@ -27,7 +27,8 @@
             <td>{{ result.student.national_id }}</td>
             <td>{{ result.assignment.name }}</td>
             <td>
-              <input type="text" name="grade_student_{{ result.student.pk }}_assignment_{{ result.assignment.pk }}" value="{{ result.grade }}">
+              <input type="text" name="grade_student_{{ result.student.pk }}_assignment_{{ result.assignment.pk }}" value="{{ result.grade }}"
+                    class="grade">
               <input type="hidden" name="assignment_result_pk_{{ result.student.pk }}_assignment_{{ result.assignment.pk }}" value="{{ result.pk }}">
             </td>
             <td>
@@ -55,3 +56,12 @@
   </div>
 
 {% endblock content %}
+
+{% block javascript %}
+  {{ block.super }}
+  <script language="JavaScript">
+    $("input.grade").click(function () {
+      $(this).select();
+    });
+  </script>
+{% endblock javascript %}

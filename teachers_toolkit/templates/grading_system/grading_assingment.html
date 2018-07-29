@@ -7,14 +7,15 @@
     <h3> {{ assignment.name }}</h3>
     <div class="row">
       <div class="col-sm-3">
-          Date: {{ assignment.assignment_date }}
-        </div>
+        Date: {{ assignment.assignment_date }}
+      </div>
       <div class="col-sm-3">
-        <a href="{% url 'grading_system:grading-not-received' assignment.pk %}" class="btn btn-primary">Not Recevived</a>
-        </div>
+        <a href="{% url 'grading_system:grading-not-received' assignment.pk %}" class="btn btn-primary">Not
+          Recevived</a>
+      </div>
     </div>
     <form method="post" action="">
-     {% csrf_token %}
+      {% csrf_token %}
       <input type="hidden" name="assignment" value="{{ assignment.pk }}">
       <table>
         <thead>
@@ -23,27 +24,36 @@
           <td>Name</td>
           <td>id</td>
           <td>grade</td>
-           <td>Comment</td>
+          <td>Comment</td>
         </tr>
         </thead>
         {% for result in results %}
           <tr>
-          <td>{{ forloop.counter }}</td>
+            <td>{{ forloop.counter }}</td>
             <td><a href="{% url 'grading_system:student-grades' result.student.id %}"> {{ result.student }}</a></td>
             <td>{{ result.student.national_id }}</td>
-            <td><input type="text" name="grade_student_{{ result.student.pk }}" value="{{ result.grade }}">
+            <td><input type="text" name="grade_student_{{ result.student.pk }}" value="{{ result.grade }}"
+                       class="grade">
               <input type="hidden" name="assignment_result_pk_{{ result.student.pk }}" value="{{ result.pk }}">
             </td>
-          <td><input type="text" name="comment_student_{{ result.student.pk }}" value="{{ result.comments }}"></td>
+            <td><input type="text" name="comment_student_{{ result.student.pk }}" value="{{ result.comments }}"></td>
           </tr>
         {% endfor %}
       </table>
-    <div class="control-group">
-      <div class="controls">
-        <button type="submit" class="btn btn-primary">Update</button>
+      <div class="control-group">
+        <div class="controls">
+          <button type="submit" class="btn btn-primary">Update</button>
+        </div>
       </div>
-    </div>
     </form>
   </div>
 
 {% endblock content %}
+{% block javascript %}
+  {{ block.super }}
+  <script language="JavaScript">
+    $("input.grade").click(function () {
+      $(this).select();
+    });
+  </script>
+{% endblock javascript %}
