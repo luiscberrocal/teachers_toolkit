@@ -1,5 +1,9 @@
 
 
+heroku pg:backups:capture
+
+
+
 heroku pg:backups:restore '' DATABASE_URL
 
 
