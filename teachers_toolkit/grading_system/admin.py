@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
-from import_export.admin import ImportExportActionModelAdmin
+from import_export.admin import ImportExportActionModelAdmin, ImportExportModelAdmin
 
-from teachers_toolkit.grading_system.resources import StudentResource
+from teachers_toolkit.grading_system.resources import StudentResource, AssignmentResultResource
 from .models import Student, Course, StudentEnrollment, AssignmentGroup, Assignment, AssignmentResult
 
 
@@ -53,6 +53,8 @@ class AssignmentAdmin(ImportExportActionModelAdmin):
 
 
 @admin.register(AssignmentResult)
-class AssignmentResultAdmin(admin.ModelAdmin):
+class AssignmentResultAdmin(ImportExportModelAdmin):
+    resource_class = AssignmentResultResource
     list_display = ('id', 'assignment', 'student', 'grade', 'comments')
     list_filter = ('assignment', 'student')
+
