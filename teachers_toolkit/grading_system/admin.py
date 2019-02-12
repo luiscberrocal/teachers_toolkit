@@ -2,21 +2,23 @@
 from django.contrib import admin
 from import_export.admin import ImportExportActionModelAdmin, ImportExportModelAdmin
 
-from teachers_toolkit.grading_system.resources import StudentResource, AssignmentResultResource
+from .resources import StudentResource, AssignmentResultResource
 from .models import Student, Course, StudentEnrollment, AssignmentGroup, Assignment, AssignmentResult
 
 
 @admin.register(Student)
 class StudentAdmin(ImportExportActionModelAdmin):
     resource_class = StudentResource
-    list_display = ('id', 'first_name', 'last_name', 'national_id', 'email')
+    list_display = ('id', 'first_name', 'last_name', 'national_id', 'email', 'active')
+    list_editable = ('active', )
 
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ('id', 'slug', 'name', 'start_date', 'end_date')
+    list_display = ('id', 'slug', 'name', 'start_date', 'end_date', 'active')
     list_filter = ('start_date', 'end_date')
     search_fields = ('name',)
+    list_editable = ('active',)
 
 
 @admin.register(StudentEnrollment)
