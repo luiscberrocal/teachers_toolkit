@@ -10,6 +10,7 @@ class Student(models.Model):
     last_name = models.CharField(max_length=60)
     national_id = models.CharField(max_length=60)
     email = models.EmailField(null=True, blank=True)
+    active = models.BooleanField(default=True)
 
     def __str__(self):
         return '{}, {}'.format(self.last_name, self.first_name)
@@ -23,6 +24,7 @@ class Course(models.Model):
     start_date = models.DateField(null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)
     slug = AutoSlugField(populate_from=['name'])
+    active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name

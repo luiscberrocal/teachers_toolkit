@@ -22,6 +22,19 @@ services:
       - "8000:8000"
     command: /start
 
+  nuxtjs:
+    build:
+      context: .
+      dockerfile: ./compose/local/nuxtjs/Dockerfile
+    depends_on:
+      - django
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+
+
+
   postgres:
     build:
       context: .
