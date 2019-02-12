@@ -330,3 +330,5 @@ teachers_toolkit/media/
 !.envs/.local/
 
 output/
+
+\.idea/
